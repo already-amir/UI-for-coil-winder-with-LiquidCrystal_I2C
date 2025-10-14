@@ -10,13 +10,25 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 #define BTN_BACK   14
 
 
+byte Check[] = {
+  B00000,
+  B00001,
+  B00011,
+  B10110,
+  B11100,
+  B01000,
+  B00000,
+  B00000
+};
+
+
 enum menu_state {
   MENU_MAIN,
 
   MENU_START,
   MENU_START_PAUSE,
-  END_START_SUCCESS,
-  END_START_UNSUCCESS,
+  END_SUCCESS,
+  END_UNSUCCESS,
 
   MENU_LOAD_SETTINGS,
 
@@ -29,7 +41,9 @@ enum menu_state {
 
   // *********************************** TO ASK
 };
-
+menu_state curr_menu = MENU_MAIN;
+int selected_item = 0;
+int top_index = 0;
 
 
 
@@ -109,6 +123,78 @@ const char* settings_item_menue[]={
   "COIL WIDTH",
   "WIRE WIDTH",
   "SAVE"
+};
+
+void show(){
+  lcd.clear();
+
+  switch(curr_menu){
+    
+    case MENU_MAIN:
+      for (int i = 0; i < 2; i++){
+        int ind= top_index + i;
+        if (ind >= main_menu_item_lenght){
+          break;
+        }
+        lcd.setCursor(0 , i);
+        if (ind == selected_item){
+          lcd.print(">");
+        }
+        else{
+          lcd.print(" ");
+        }
+        lcd.print(main_menu_item[ind]);
+      }
+      break;
+
+    case MENU_START:
+      lcd.setCursor(0,2);
+      lcd.print("WINDING...");
+      lcd.setCursor(1, 0);
+      lcd.print("PAUSE");
+      lcd.setCursor(1, 8);
+      lcd.print("ESC");
+      break;
+      
+    case MENU_START_PAUSE:
+      lcd.setCursor(0,2);
+      lcd.print("PAUSED");
+      lcd.setCursor(1, 0);
+      lcd.print("PAUSE");
+      lcd.setCursor(1, 8);
+      lcd.print("ESC");
+      break;
+
+    case END_SUCCESS:
+    case END_UNSUCCESS:
+
+    case MENU_LOAD_SETTINGS:
+    case MENU_SETTINGS:
+      for(int i=0;i<2;i++){
+        int ind = top_index + i;
+        if (ind >= settings_item_menue_lenght){
+          break;
+        }
+        lcd.setCursor(0,i);
+        if (ind==selected_item){
+          lcd.print(">");
+        }
+        else{
+          lcd.print(" ");
+        }
+        lcd.print(settings_item_menue[ind]);
+      }
+      break;
+    case MENU_SETTINGS_TURNS:
+    case MENU_SETTINGS_COIL:
+    case MENU_SETTINGS_WIRE:
+    case MENU_INFO:
+      break;
+
+    
+  }
+
+
 }
 
 
@@ -116,14 +202,13 @@ const char* settings_item_menue[]={
 
 
 void setup() {
- 
-
+  lcd.createChar(3, Check);
+  lcd.setCursor(0, 1);
+  lcd.write(3);
 }
 
-menu_state curr_menu = MENU_MAIN;
-int selected_item = 0;
-int top_index = 0;
+
 void loop() {
-  // put your main code here, to run repeatedly:
+
 
 }
