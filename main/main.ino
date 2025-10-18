@@ -56,7 +56,8 @@ enum menu_state {
   SAVE_UNSUCCESS,
 
   MENU_INFO,
-  ZERO_STATE
+
+  MENU_ZERO_STATE
 
   // *********************************** TO ASK
 };
@@ -99,11 +100,12 @@ bool is_button_pressed(int pin){
   return false;
 }
 
-const int main_menu_item_lenght = 4;
+const int main_menu_item_lenght = 5;
 const char* main_menu_item[]={
   "START",
   "LOAD SETTINGS",
   "SETTING",
+  "ZERO STATE",
   "INFO"
 };
 
@@ -171,16 +173,16 @@ void show(){
       lcd.print("WINDING...");
       lcd.setCursor(0, 1);
       lcd.print("PAUSE");
-      lcd.setCursor(8, 1);
+      lcd.setCursor(13, 1);
       lcd.print("ESC");
       break;
       
     case MENU_START_PAUSE:
-      lcd.setCursor(6,0);
+      lcd.setCursor(5,0);
       lcd.print("PAUSED");
       lcd.setCursor(0, 1);
       lcd.print("CONTINUE");
-      lcd.setCursor(8, 1);
+      lcd.setCursor(13, 1);
       lcd.print("ESC");
       break;
 
@@ -194,7 +196,7 @@ void show(){
     case END_UNSUCCESS:
       lcd.setCursor(0,0);
       lcd.print("WINDING WAS NOT");
-      lcd.setCursor(4,1);
+      lcd.setCursor(3,1);
       lcd.print("SUCCESSFUL");
       break;
     case MENU_LOAD_SETTINGS:
@@ -276,7 +278,7 @@ void show(){
       lcd.print("BY ALI ");
       break;
 
-    case ZERO_STATE:
+    case MENU_ZERO_STATE:
       lcd.setCursor(0, 0);
       lcd.print("STATE ZERO");
       break;
@@ -293,10 +295,10 @@ void setup() {
   lcd.init();
   lcd.backlight();
 
-  pinMode(BTN_UP, INPUT_PULLUP);
-  pinMode(BTN_DOWN, INPUT_PULLUP);
-  pinMode(BTN_OK, INPUT_PULLUP);
-  pinMode(BTN_BACK, INPUT_PULLUP);
+  pinMode(up, INPUT_PULLUP);
+  pinMode(down, INPUT_PULLUP);
+  pinMode(ok, INPUT_PULLUP);
+  pinMode(back, INPUT_PULLUP);
 
   EEPROM.begin(64);
   show();
@@ -307,79 +309,94 @@ void setup() {
 }
 
 
+void upp(){
+  if (selected_item>0){
+    selected_item--;
+    if (selected_item<top_index){
+      top_index--;
+    }
+    show();
+  }
+}
+
+void downn(const int num){
+  if (selected_item<num-1){
+    selected_item++;
+    if (selected_item>top_index+1){
+      top_index++;
+    }
+    show();
+  }
+}
+
 void loop() {
 
   if (curr_menu==MENU_MAIN){
     if (is_button_pressed(up)){
-
+      upp();
     }
     if (is_button_pressed(down)){
-
+      downn(main_menu_item_lenght);
     }
     if(is_button_pressed(ok)){
-
-    }
-    if(is_button_pressed(back)){
-
+      switch (selected_item){
+        case 0: curr_menu=MENU_START; break;
+        case 1: curr_menu=MENU_LOAD_SETTINGS;break;
+        case 2: curr_menu=MENU_SETTINGS;break;
+        case 3: curr_menu=MENU_ZERO_STATE;break;
+        case 4: curr_menu=MENU_INFO; break;
+        
+      }
+      selected_item=0;
+      top_index=0;
+      show();
     }
   }
+
   else if (curr_menu== MENU_START){
-    if (is_button_pressed(up)){
-
-    }
-    if (is_button_pressed(down)){
-
-    }
+    
     if(is_button_pressed(ok)){
-
+      // **************************************** TODO pause prep
+      curr_menu=MENU_START_PAUSE;
+      show();
     }
     if(is_button_pressed(back)){
-      
+      // ***************************************8 TODO terminate
+      curr_menu=END_UNSUCCESS;
+      show();
     }
+    
+    //******************************************* TODO  winding
   }
   else if (curr_menu== MENU_START_PAUSE){
-    if (is_button_pressed(up)){
-
-    }
-    if (is_button_pressed(down)){
-
-    }
+    
     if(is_button_pressed(ok)){
-
+      // **************************************** TODO continue prep
+      curr_menu=MENU_START;
+      show();
     }
     if(is_button_pressed(back)){
-      
+      //**************************************** TODO terminate
+      curr_menu=END_UNSUCCESS;
+      show();
     }
+    // **************************************** TODO pause
     
   }
   else if (curr_menu== END_SUCCESS){
-    if (is_button_pressed(up)){
-
+  
+    if(is_button_pressed(ok)||is_button_pressed(back)){
+      curr_menu=MENU_MAIN;
+      show();
     }
-    if (is_button_pressed(down)){
-
-    }
-    if(is_button_pressed(ok)){
-
-    }
-    if(is_button_pressed(back)){
-      
-    }
-    
   }
   else if (curr_menu== END_UNSUCCESS){
-    if (is_button_pressed(up)){
-
+    
+    if(is_button_pressed(ok)||is_button_pressed(back)){
+      curr_menu=MENU_MAIN;
+      show();
     }
-    if (is_button_pressed(down)){
-
-    }
-    if(is_button_pressed(ok)){
-
-    }
-    if(is_button_pressed(back)){
-      
-    }
+    //**************************************** TODO esc
     
   }
   else if (curr_menu== MENU_LOAD_SETTINGS){
@@ -502,7 +519,7 @@ void loop() {
     }
     
   }
-  else if (curr_menu== ZERO_STATE){
+  else if (curr_menu== MENU_ZERO_STATE){
     if (is_button_pressed(up)){
 
     }
