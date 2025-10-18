@@ -21,6 +21,21 @@ byte Check[] = {
   B00000
 };
 
+byte github[] = {
+  B01001,
+  B01111,
+  B01111,
+  B01111,
+  B00110,
+  B10110,
+  B01110,
+  B00110
+ 
+  
+};
+
+
+
 
 enum menu_state {
   MENU_MAIN,
@@ -88,7 +103,7 @@ const char* main_menu_item[]={
   "INFO"
 };
 
-const int load_item_length=25;
+
 const char* load_item[]={
   "UNDEFINED 1",
   "UNDEFINED 2",
@@ -148,27 +163,53 @@ void show(){
       break;
 
     case MENU_START:
-      lcd.setCursor(0,2);
+      lcd.setCursor(3,0);
       lcd.print("WINDING...");
-      lcd.setCursor(1, 0);
+      lcd.setCursor(0, 1);
       lcd.print("PAUSE");
-      lcd.setCursor(1, 8);
+      lcd.setCursor(8, 1);
       lcd.print("ESC");
       break;
       
     case MENU_START_PAUSE:
-      lcd.setCursor(0,2);
+      lcd.setCursor(6,0);
       lcd.print("PAUSED");
-      lcd.setCursor(1, 0);
-      lcd.print("PAUSE");
-      lcd.setCursor(1, 8);
+      lcd.setCursor(0, 1);
+      lcd.print("CONTINUE");
+      lcd.setCursor(8, 1);
       lcd.print("ESC");
       break;
 
     case END_SUCCESS:
-    case END_UNSUCCESS:
+      lcd.setCursor(3,0);
+      lcd.print("WINDING DONE");
+      lcd.setCursor(4,1);
+      lcd.print("SUCCESSFLY");
+      break;
 
+    case END_UNSUCCESS:
+      lcd.setCursor(0,0);
+      lcd.print("WINDING WAS NOT");
+      lcd.setCursor(4,1);
+      lcd.print("SUCCESSFUL");
+      break;
     case MENU_LOAD_SETTINGS:
+      for (int i = 0; i < 2; i++){
+        int ind= top_index + i;
+        if (ind >= max_save){
+          break;
+        }
+        lcd.setCursor(0 , i);
+        if (ind == selected_item){
+          lcd.print(">");
+        }
+        else{
+          lcd.print(" ");
+        }
+        lcd.print(load_item[ind]);
+      }
+      break;
+
     case MENU_SETTINGS:
       for(int i=0;i<2;i++){
         int ind = top_index + i;
@@ -186,9 +227,14 @@ void show(){
       }
       break;
     case MENU_SETTINGS_TURNS:
+
     case MENU_SETTINGS_COIL:
     case MENU_SETTINGS_WIRE:
     case MENU_INFO:
+      lcd.setCursor(0, 0);
+      lcd.print("Coil Winder v1.0");
+      lcd.setCursor(0, 1);
+      lcd.print("already-amir");
       break;
 
     
