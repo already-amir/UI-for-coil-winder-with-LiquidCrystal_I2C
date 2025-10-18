@@ -52,7 +52,11 @@ enum menu_state {
   MENU_SETTINGS_COIL,
   MENU_SETTINGS_WIRE,
 
-  MENU_INFO
+  SAVE_SUCCESS,
+  SAVE_UNSUCCESS,
+
+  MENU_INFO,
+  ZERO_STATE
 
   // *********************************** TO ASK
 };
@@ -70,7 +74,7 @@ int last_save = 0;
 int max_save = 25;
 void save_settings(){
   if (last_save < max_save){
-    int bios=10*last_save;
+    int bios=8*last_save;
     EEPROM.put(bios + 0,turns);
     EEPROM.put(bios + 4,coil_width);
     EEPROM.put(bios + 8,wire_width);
@@ -80,7 +84,7 @@ void save_settings(){
 }
 
 void load_setings(int save_num){
-  int bios= 10 * save_num;
+  int bios= 8 * save_num;
   EEPROM.get(bios + 0,turns);
   EEPROM.get(bios + 4,coil_width);
   EEPROM.get(bios + 8,wire_width);
@@ -184,7 +188,7 @@ void show(){
       lcd.setCursor(3,0);
       lcd.print("WINDING DONE");
       lcd.setCursor(4,1);
-      lcd.print("SUCCESSFLY");
+      lcd.print("SUCCESSFULY");
       break;
 
     case END_UNSUCCESS:
@@ -227,20 +231,57 @@ void show(){
       }
       break;
     case MENU_SETTINGS_TURNS:
-
-    case MENU_SETTINGS_COIL:
-    case MENU_SETTINGS_WIRE:
-    case MENU_INFO:
       lcd.setCursor(0, 0);
-      lcd.print("Coil Winder v1.0");
+      lcd.print("TURNS: ");
+      lcd.print(turns);
       lcd.setCursor(0, 1);
-      lcd.print("already-amir");
+      lcd.print("OK");
+      lcd.setCursor(8, 1);
+      lcd.print("BACK");
       break;
 
-    
+    case MENU_SETTINGS_COIL:
+      lcd.setCursor(0, 0);
+      lcd.print("COIL WIDTH: ");
+      lcd.print(coil_width,1);
+      lcd.setCursor(0, 1);
+      lcd.print("OK");
+      lcd.setCursor(8, 1);
+      lcd.print("BACK");
+      break;
+
+    case MENU_SETTINGS_WIRE:
+      lcd.setCursor(0, 0);
+      lcd.print("WIRE WIDTH: ");
+      lcd.print(wire_width,2);
+      lcd.setCursor(0, 1);
+      lcd.print("OK");
+      lcd.setCursor(8, 1);
+      lcd.print("BACK");
+      break;
+
+    case SAVE_SUCCESS:
+      lcd.setCursor(3,0);
+      lcd.print("SAVE SUCCESSFULY");
+      break;
+    case SAVE_UNSUCCESS:
+      lcd.setCursor(3,0);
+      lcd.print("SAVE WAS UNSUCCESSFUL");
+      break;
+
+    case MENU_INFO:
+      lcd.setCursor(0, 0);
+      lcd.print("COIL WINDER V1.0");
+      lcd.setCursor(0, 1);
+      lcd.print("BY ALI ");
+      break;
+
+    case ZERO_STATE:
+      lcd.setCursor(0, 0);
+      lcd.print("STATE ZERO");
+      break;
+
   }
-
-
 }
 
 
@@ -248,13 +289,69 @@ void show(){
 
 
 void setup() {
-  lcd.createChar(3, Check);
-  lcd.setCursor(0, 1);
-  lcd.write(3);
+
+  lcd.init();
+  lcd.backlight();
+
+  pinMode(BTN_UP, INPUT_PULLUP);
+  pinMode(BTN_DOWN, INPUT_PULLUP);
+  pinMode(BTN_OK, INPUT_PULLUP);
+  pinMode(BTN_BACK, INPUT_PULLUP);
+
+  EEPROM.begin(64);
+  show();
+
+  //lcd.createChar(3, Check);
+  //lcd.setCursor(0, 1);
+  //lcd.write(3);
 }
 
 
 void loop() {
+
+  if (curr_menu==MENU_MAIN){
+
+  }
+  else if (curr_menu== MENU_START){
+
+  }
+  else if (curr_menu== MENU_START_PAUSE){
+    
+  }
+  else if (curr_menu== END_SUCCESS){
+    
+  }
+  else if (curr_menu== END_UNSUCCESS){
+    
+  }
+  else if (curr_menu== MENU_LOAD_SETTINGS){
+    
+  }
+  else if (curr_menu== MENU_SETTINGS){
+    
+  }
+  else if (curr_menu== MENU_SETTINGS_TURNS){
+
+  }
+  else if (curr_menu== MENU_SETTINGS_COIL){
+    
+  }
+  else if (curr_menu== MENU_SETTINGS_WIRE){
+    
+  }
+  else if (curr_menu== SAVE_SUCCESS){
+    
+  }
+  else if (curr_menu== SAVE_UNSUCCESS){
+    
+  }
+  else if (curr_menu== MENU_INFO){
+    
+  }
+  else if (curr_menu== ZERO_STATE){
+    
+  }
+  
 
 
 }
