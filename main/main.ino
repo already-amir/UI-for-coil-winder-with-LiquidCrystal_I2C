@@ -4,10 +4,10 @@
 
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
-#define BTN_UP     12
-#define BTN_DOWN   13
-#define BTN_OK     27
-#define BTN_BACK   14
+#define up     12
+#define down   13
+#define ok     27
+#define back   14
 
 
 byte Check[] = {
@@ -310,47 +310,216 @@ void setup() {
 void loop() {
 
   if (curr_menu==MENU_MAIN){
+    if (is_button_pressed(up)){
 
+    }
+    if (is_button_pressed(down)){
+
+    }
+    if(is_button_pressed(ok)){
+
+    }
+    if(is_button_pressed(back)){
+
+    }
   }
   else if (curr_menu== MENU_START){
+    if (is_button_pressed(up)){
 
+    }
+    if (is_button_pressed(down)){
+
+    }
+    if(is_button_pressed(ok)){
+
+    }
+    if(is_button_pressed(back)){
+      
+    }
   }
   else if (curr_menu== MENU_START_PAUSE){
+    if (is_button_pressed(up)){
+
+    }
+    if (is_button_pressed(down)){
+
+    }
+    if(is_button_pressed(ok)){
+
+    }
+    if(is_button_pressed(back)){
+      
+    }
     
   }
   else if (curr_menu== END_SUCCESS){
+    if (is_button_pressed(up)){
+
+    }
+    if (is_button_pressed(down)){
+
+    }
+    if(is_button_pressed(ok)){
+
+    }
+    if(is_button_pressed(back)){
+      
+    }
     
   }
   else if (curr_menu== END_UNSUCCESS){
+    if (is_button_pressed(up)){
+
+    }
+    if (is_button_pressed(down)){
+
+    }
+    if(is_button_pressed(ok)){
+
+    }
+    if(is_button_pressed(back)){
+      
+    }
     
   }
   else if (curr_menu== MENU_LOAD_SETTINGS){
+    if (is_button_pressed(up)){
+
+    }
+    if (is_button_pressed(down)){
+
+    }
+    if(is_button_pressed(ok)){
+
+    }
+    if(is_button_pressed(back)){
+      
+    }
     
   }
   else if (curr_menu== MENU_SETTINGS){
+    if (is_button_pressed(up)){
+
+    }
+    if (is_button_pressed(down)){
+
+    }
+    if(is_button_pressed(ok)){
+
+    }
+    if(is_button_pressed(back)){
+      
+    }
     
   }
   else if (curr_menu== MENU_SETTINGS_TURNS){
+    if (is_button_pressed(up)){
+
+    }
+    if (is_button_pressed(down)){
+
+    }
+    if(is_button_pressed(ok)){
+
+    }
+    if(is_button_pressed(back)){
+      
+    }
 
   }
   else if (curr_menu== MENU_SETTINGS_COIL){
+    if (is_button_pressed(up)){
+
+    }
+    if (is_button_pressed(down)){
+
+    }
+    if(is_button_pressed(ok)){
+
+    }
+    if(is_button_pressed(back)){
+      
+    }
     
   }
   else if (curr_menu== MENU_SETTINGS_WIRE){
+    if (is_button_pressed(up)){
+
+    }
+    if (is_button_pressed(down)){
+
+    }
+    if(is_button_pressed(ok)){
+
+    }
+    if(is_button_pressed(back)){
+      
+    }
     
   }
   else if (curr_menu== SAVE_SUCCESS){
+    if (is_button_pressed(up)){
+
+    }
+    if (is_button_pressed(down)){
+
+    }
+    if(is_button_pressed(ok)){
+
+    }
+    if(is_button_pressed(back)){
+      
+    }
     
   }
   else if (curr_menu== SAVE_UNSUCCESS){
+    if (is_button_pressed(up)){
+
+    }
+    if (is_button_pressed(down)){
+
+    }
+    if(is_button_pressed(ok)){
+
+    }
+    if(is_button_pressed(back)){
+      
+    }
     
   }
   else if (curr_menu== MENU_INFO){
+    if (is_button_pressed(up)){
+
+    }
+    if (is_button_pressed(down)){
+
+    }
+    if(is_button_pressed(ok)){
+
+    }
+    if(is_button_pressed(back)){
+      
+    }
     
   }
   else if (curr_menu== ZERO_STATE){
+    if (is_button_pressed(up)){
+
+    }
+    if (is_button_pressed(down)){
+
+    }
+    if(is_button_pressed(ok)){
+
+    }
+    if(is_button_pressed(back)){
+      
+    }
     
   }
+
+  
+  
   
 
 
