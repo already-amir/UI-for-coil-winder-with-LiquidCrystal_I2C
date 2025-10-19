@@ -9,7 +9,6 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 #define ok     27
 #define back   14
 
-
 byte Check[] = {
   B00000,
   B00001,
@@ -30,45 +29,33 @@ byte github[] = {
   B10110,
   B01110,
   B00110
- 
-  
 };
-
-
 
 
 enum menu_state {
   MENU_MAIN,
-
   MENU_START,
   MENU_START_PAUSE,
   END_SUCCESS,
   END_UNSUCCESS,
-
   MENU_LOAD_SETTINGS,
-
   MENU_SETTINGS,
   MENU_SETTINGS_TURNS,
   MENU_SETTINGS_COIL,
   MENU_SETTINGS_WIRE,
-
   SAVE_SUCCESS,
   SAVE_UNSUCCESS,
-
   MENU_INFO,
-
-  MENU_ZERO_STATE
-
-  // *********************************** TO ASK
+  MENU_ZERO_STATE,
+  MENU_LOAD_SETTINGS_SUCCESSFUL
 };
+
 menu_state curr_menu = MENU_MAIN;
 int selected_item = 0;
 int top_index = 0;
 
-
-
 int turns =  1000;
-float coil_width = 20;
+float coil_width = 20.0;
 float wire_width = 0.25;
 
 int last_save = 0;
@@ -108,7 +95,6 @@ const char* main_menu_item[]={
   "ZERO STATE",
   "INFO"
 };
-
 
 const char* load_item[]={
   "UNDEFINED 1",
@@ -199,6 +185,7 @@ void show(){
       lcd.setCursor(3,1);
       lcd.print("SUCCESSFUL");
       break;
+
     case MENU_LOAD_SETTINGS:
       for (int i = 0; i < 2; i++){
         int ind= top_index + i;
@@ -232,6 +219,15 @@ void show(){
         lcd.print(settings_item_menue[ind]);
       }
       break;
+
+    case MENU_LOAD_SETTINGS_SUCCESSFUL:
+      lcd.setCursor(2, 0);
+      lcd.print("SAVE LOADED");
+      lcd.print(turns);
+      lcd.setCursor(2, 1);
+      lcd.print("SUCCESSFULLY");
+      break;
+
     case MENU_SETTINGS_TURNS:
       lcd.setCursor(0, 0);
       lcd.print("TURNS: ");
@@ -241,7 +237,7 @@ void show(){
       lcd.setCursor(8, 1);
       lcd.print("BACK");
       break;
-
+    
     case MENU_SETTINGS_COIL:
       lcd.setCursor(0, 0);
       lcd.print("COIL WIDTH: ");
@@ -266,6 +262,7 @@ void show(){
       lcd.setCursor(3,0);
       lcd.print("SAVE SUCCESSFULY");
       break;
+
     case SAVE_UNSUCCESS:
       lcd.setCursor(3,0);
       lcd.print("SAVE WAS UNSUCCESSFUL");
@@ -287,9 +284,6 @@ void show(){
 }
 
 
-
-
-
 void setup() {
 
   lcd.init();
@@ -300,7 +294,7 @@ void setup() {
   pinMode(ok, INPUT_PULLUP);
   pinMode(back, INPUT_PULLUP);
 
-  EEPROM.begin(64);
+  EEPROM.begin(256);
   show();
 
   //lcd.createChar(3, Check);
@@ -309,7 +303,7 @@ void setup() {
 }
 
 
-void upp(){
+void up_key(){
   if (selected_item>0){
     selected_item--;
     if (selected_item<top_index){
@@ -319,7 +313,7 @@ void upp(){
   }
 }
 
-void downn(const int num){
+void down_key(const int num){
   if (selected_item<num-1){
     selected_item++;
     if (selected_item>top_index+1){
@@ -333,10 +327,10 @@ void loop() {
 
   if (curr_menu==MENU_MAIN){
     if (is_button_pressed(up)){
-      upp();
+      up_key();
     }
     if (is_button_pressed(down)){
-      downn(main_menu_item_lenght);
+      down_key(main_menu_item_lenght);
     }
     if(is_button_pressed(ok)){
       switch (selected_item){
@@ -345,7 +339,6 @@ void loop() {
         case 2: curr_menu=MENU_SETTINGS;break;
         case 3: curr_menu=MENU_ZERO_STATE;break;
         case 4: curr_menu=MENU_INFO; break;
-        
       }
       selected_item=0;
       top_index=0;
@@ -381,156 +374,169 @@ void loop() {
       show();
     }
     // **************************************** TODO pause
-    
   }
-  else if (curr_menu== END_SUCCESS){
+  else if (curr_menu == END_SUCCESS || curr_menu == END_UNSUCCESS ){
   
     if(is_button_pressed(ok)||is_button_pressed(back)){
       curr_menu=MENU_MAIN;
-      show();
-    }
-  }
-  else if (curr_menu== END_UNSUCCESS){
-    
-    if(is_button_pressed(ok)||is_button_pressed(back)){
-      curr_menu=MENU_MAIN;
+      selected_item=0;
+      top_index=0;
       show();
     }
     //**************************************** TODO esc
-    
   }
   else if (curr_menu== MENU_LOAD_SETTINGS){
-    if (is_button_pressed(up)){
 
+    if (is_button_pressed(up)){
+      up_key();
     }
     if (is_button_pressed(down)){
-
+      down_key(max_save);
     }
     if(is_button_pressed(ok)){
-
+      load_setings(selected_item);
+      curr_menu=MENU_LOAD_SETTINGS_SUCCESSFUL;
+      selected_item=0;
+      top_index=0;
+      show();
     }
     if(is_button_pressed(back)){
-      
+      curr_menu=MENU_MAIN;
+      selected_item=1;
+      top_index=1;
+      show();
     }
-    
+  }
+  else if (curr_menu == MENU_LOAD_SETTINGS_SUCCESSFUL){
+  
+    if(is_button_pressed(ok)||is_button_pressed(back)){
+      curr_menu=MENU_LOAD_SETTINGS;
+      show();
+    }
   }
   else if (curr_menu== MENU_SETTINGS){
     if (is_button_pressed(up)){
-
+      up_key();
     }
     if (is_button_pressed(down)){
-
+      down_key(settings_item_menue_lenght);
     }
     if(is_button_pressed(ok)){
-
-    }
-    if(is_button_pressed(back)){
-      
-    }
-    
+      switch (selected_item){
+        case 0: curr_menu=MENU_SETTINGS_TURNS; break;
+        case 1: curr_menu=MENU_SETTINGS_COIL;break;
+        case 2: curr_menu=MENU_SETTINGS_WIRE;break;
+        case 3: curr_menu=SAVE_SUCCESS;break;
+      }
+      selected_item=0;
+      top_index=0;
+      show();
+    }  
   }
   else if (curr_menu== MENU_SETTINGS_TURNS){
     if (is_button_pressed(up)){
-
+      turns+=10;
+      show();
     }
     if (is_button_pressed(down)){
-
+      turns-=10;
+      if (turns<0){
+        turns=0;
+      }
+      show();
     }
-    if(is_button_pressed(ok)){
-
+    if(is_button_pressed(ok)||is_button_pressed(back)){
+      curr_menu=MENU_SETTINGS;
+      show();
     }
-    if(is_button_pressed(back)){
-      
-    }
-
   }
   else if (curr_menu== MENU_SETTINGS_COIL){
     if (is_button_pressed(up)){
-
+      coil_width+=0.5;
+      show();
     }
     if (is_button_pressed(down)){
-
+      coil_width-=0.5;
+      if (coil_width<0){
+        coil_width=0.0f;
+      }
+      show();
     }
-    if(is_button_pressed(ok)){
-
+    if(is_button_pressed(ok)||is_button_pressed(back)){
+      curr_menu=MENU_SETTINGS;
+      show();
     }
-    if(is_button_pressed(back)){
-      
-    }
-    
   }
   else if (curr_menu== MENU_SETTINGS_WIRE){
     if (is_button_pressed(up)){
-
+      wire_width+=0.01;
+      show();
     }
     if (is_button_pressed(down)){
-
+      wire_width-=0.01;
+      if (wire_width<0){
+        wire_width=0.0f;
+      }
+      show();
     }
-    if(is_button_pressed(ok)){
-
+    if(is_button_pressed(ok)||is_button_pressed(back)){
+      curr_menu=MENU_SETTINGS;
+      show();
     }
-    if(is_button_pressed(back)){
-      
-    }
-    
   }
   else if (curr_menu== SAVE_SUCCESS){
-    if (is_button_pressed(up)){
 
-    }
-    if (is_button_pressed(down)){
-
-    }
     if(is_button_pressed(ok)){
-
+      save_settings();
+      curr_menu=MENU_SETTINGS;
+      selected_item=3;
+      top_index=3;
+      show();
     }
     if(is_button_pressed(back)){
-      
+      curr_menu=MENU_SETTINGS;
+      selected_item=3;
+      top_index=3;
+      show();
     }
     
   }
   else if (curr_menu== SAVE_UNSUCCESS){
-    if (is_button_pressed(up)){
-
-    }
-    if (is_button_pressed(down)){
-
-    }
-    if(is_button_pressed(ok)){
-
-    }
-    if(is_button_pressed(back)){
-      
+  
+    if(is_button_pressed(ok)||is_button_pressed(back)){
+      curr_menu=MENU_SETTINGS;
+      selected_item=3;
+      top_index=3;
+      show();
     }
     
   }
   else if (curr_menu== MENU_INFO){
-    if (is_button_pressed(up)){
-
-    }
-    if (is_button_pressed(down)){
-
-    }
-    if(is_button_pressed(ok)){
-
-    }
-    if(is_button_pressed(back)){
-      
-    }
     
+    if(is_button_pressed(ok)||is_button_pressed(back)){
+      curr_menu=MENU_MAIN;
+      selected_item=4;
+      top_index=4;
+      show();
+    }
+  
   }
   else if (curr_menu== MENU_ZERO_STATE){
     if (is_button_pressed(up)){
-
+      //********************************* manual left
     }
     if (is_button_pressed(down)){
-
+      //********************************* manual right
     }
     if(is_button_pressed(ok)){
-
+      //********************************* auto state zero
+      
     }
     if(is_button_pressed(back)){
-      
+      curr_menu=MENU_MAIN;
+      selected_item=3;
+      top_index=3;
+      show();
     }
     
   }
