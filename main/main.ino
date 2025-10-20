@@ -92,7 +92,7 @@ const char* main_menu_item[]={
   "START",
   "LOAD SETTINGS",
   "SETTING",
-  "ZERO STATE",
+  "STATE ZERO",
   "INFO"
 };
 
@@ -223,7 +223,6 @@ void show(){
     case MENU_LOAD_SETTINGS_SUCCESSFUL:
       lcd.setCursor(2, 0);
       lcd.print("SAVE LOADED");
-      lcd.print(turns);
       lcd.setCursor(2, 1);
       lcd.print("SUCCESSFULLY");
       break;
@@ -270,9 +269,9 @@ void show(){
 
     case MENU_INFO:
       lcd.setCursor(0, 0);
-      lcd.print("COIL WINDER V1.0");
+      lcd.print("COIL WINDER V1.1");
       lcd.setCursor(0, 1);
-      lcd.print("BY ALI ");
+      lcd.print("BY ALI & AMIR");
       break;
 
     case MENU_ZERO_STATE:
@@ -396,14 +395,13 @@ void loop() {
     if(is_button_pressed(ok)){
       load_setings(selected_item);
       curr_menu=MENU_LOAD_SETTINGS_SUCCESSFUL;
-      selected_item=0;
-      top_index=0;
+      
       show();
     }
     if(is_button_pressed(back)){
       curr_menu=MENU_MAIN;
       selected_item=1;
-      top_index=1;
+      top_index=0;
       show();
     }
   }
@@ -428,14 +426,13 @@ void loop() {
         case 2: curr_menu=MENU_SETTINGS_WIRE;break;
         case 3: curr_menu=SAVE_SUCCESS;break;
       }
-      selected_item=0;
-      top_index=0;
+      
       show();
     }
     if (is_button_pressed(back)){
       curr_menu=MENU_MAIN;
       selected_item=2;
-      top_index=2;
+      top_index=1;
       show();
     }  
   }
@@ -470,8 +467,7 @@ void loop() {
     }
     if(is_button_pressed(ok)||is_button_pressed(back)){
       curr_menu=MENU_SETTINGS;
-      selected_item=1;
-      top_index=1;
+      
       show();
     }
   }
@@ -489,8 +485,7 @@ void loop() {
     }
     if(is_button_pressed(ok)||is_button_pressed(back)){
       curr_menu=MENU_SETTINGS;
-      selected_item=2;
-      top_index=2;
+      
       show();
     }
   }
@@ -499,14 +494,12 @@ void loop() {
     if(is_button_pressed(ok)){
       save_settings();
       curr_menu=MENU_SETTINGS;
-      selected_item=3;
-      top_index=3;
+      
       show();
     }
     if(is_button_pressed(back)){
       curr_menu=MENU_SETTINGS;
-      selected_item=3;
-      top_index=3;
+      
       show();
     }
     
@@ -523,10 +516,11 @@ void loop() {
   }
   else if (curr_menu== MENU_INFO){
     
-    if(is_button_pressed(back)){
+    if(is_button_pressed(back)||is_button_pressed(ok)){
       curr_menu=MENU_MAIN;
+      top_index=3;
       selected_item=4;
-      top_index=4;
+      
       show();
     }
   
