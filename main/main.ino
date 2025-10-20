@@ -431,6 +431,12 @@ void loop() {
       selected_item=0;
       top_index=0;
       show();
+    }
+    if (is_button_pressed(back)){
+      curr_menu=MENU_MAIN;
+      selected_item=2;
+      top_index=2;
+      show();
     }  
   }
   else if (curr_menu== MENU_SETTINGS_TURNS){
@@ -464,6 +470,8 @@ void loop() {
     }
     if(is_button_pressed(ok)||is_button_pressed(back)){
       curr_menu=MENU_SETTINGS;
+      selected_item=1;
+      top_index=1;
       show();
     }
   }
@@ -481,6 +489,8 @@ void loop() {
     }
     if(is_button_pressed(ok)||is_button_pressed(back)){
       curr_menu=MENU_SETTINGS;
+      selected_item=2;
+      top_index=2;
       show();
     }
   }
@@ -513,7 +523,7 @@ void loop() {
   }
   else if (curr_menu== MENU_INFO){
     
-    if(is_button_pressed(ok)||is_button_pressed(back)){
+    if(is_button_pressed(back)){
       curr_menu=MENU_MAIN;
       selected_item=4;
       top_index=4;
@@ -530,7 +540,6 @@ void loop() {
     }
     if(is_button_pressed(ok)){
       //********************************* auto state zero
-      
     }
     if(is_button_pressed(back)){
       curr_menu=MENU_MAIN;
@@ -538,12 +547,5 @@ void loop() {
       top_index=3;
       show();
     }
-    
   }
-
-  
-  
-  
-
-
 }
