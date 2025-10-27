@@ -9,29 +9,6 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 #define ok     27
 #define back   14
 
-byte Check[] = {
-  B00000,
-  B00001,
-  B00011,
-  B10110,
-  B11100,
-  B01000,
-  B00000,
-  B00000
-};
-
-byte github[] = {
-  B01001,
-  B01111,
-  B01111,
-  B01111,
-  B00110,
-  B10110,
-  B01110,
-  B00110
-};
-
-
 enum menu_state {
   MENU_MAIN,
   MENU_START,
@@ -57,6 +34,10 @@ int top_index = 0;
 int turns =  1000;
 float coil_width = 20.0;
 float wire_width = 0.25;
+
+int temp_turns;
+float temp_coil_width;
+float wire_width;
 
 int last_save = 0;
 int max_save = 25;
@@ -124,12 +105,11 @@ const char* load_item[]={
   "UNDEFINED 25"
 };
 
-const int settings_item_menue_lenght=4;
+const int settings_item_menue_lenght=3;
 const char* settings_item_menue[]={
   "TURNS",
   "COIL WIDTH",
   "WIRE WIDTH",
-  "SAVE"
 };
 
 void show(){
@@ -296,9 +276,7 @@ void setup() {
   EEPROM.begin(256);
   show();
 
-  //lcd.createChar(3, Check);
-  //lcd.setCursor(0, 1);
-  //lcd.write(3);
+  
 }
 
 
