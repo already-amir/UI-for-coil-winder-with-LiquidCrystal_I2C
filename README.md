@@ -118,15 +118,6 @@ Add speed control & winding progress tracking
 
 Support for larger displays (20x4 or OLED)
 
-## 🖼️ Project Photos
-
-<p align="center">
-  <img src="pic\1.jpg" width="50% "  style="transform: rotate(-90deg);>
-</p>
-
-
-
-
 ## 🪪 License
 
 This project is licensed under the MIT License — feel free to use, modify, and distribute with proper credit.
